@@ -1,15 +1,14 @@
-//============================================================================
-// Name        : yellowBelt.cpp
-// Author      :
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
-//============================================================================
-
 #include <iostream>
+#include <vector>
 using namespace std;
 
 int main() {
-	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
+	int N; cin >> N;
+	vector<int> data;
+	for (int i = 0; i < N; i++ ) {
+		int q; cin >> q;
+		data.push_back(q);
+	}
+
 	return 0;
 }

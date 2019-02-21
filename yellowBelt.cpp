@@ -34,25 +34,22 @@ public:
 
 	// Обновить статусы по данному количеству задач конкретного разработчика
 	tuple<TasksInfo, TasksInfo> PerformPersonTasks(const string& person, int task_count) {
-		TasksInfo updated_tasks = vault[person];
-		vector<TaskStatus> selector{TaskStatus::NEW, TaskStatus::IN_PROGRESS, TaskStatus::TESTING};
-		int tmp_count = 0;
-		for (auto el : selector) {
-			updated_tasks[el] += tmp_count;
-			if (updated_tasks[el] > task_count) {
-				updated_tasks[el] -= task_count;
-				updated_tasks[static_cast<TaskStatus>(static_cast<int>(el) +1)] += task_count;
-				tmp_count = task_count;
-				break;
-			} else {
-				task_count -= updated_tasks[el];
-				tmp_count = updated_tasks[el];
-				updated_tasks[el] = 0;
+		TasksInfo copy_tasks = vault[person];
+		TasksInfo updated_tasks, untouched_tasks;
+		for (int i = 0; i < task_count; i++) {
+			if (copy_tasks[TaskStatus::NEW] > 0) {
+				--copy_tasks[TaskStatus::NEW];
+				++updated_tasks[TaskStatus::NEW];
+				continue;
+			} else if (copy_tasks[TaskStatus::IN_PROGRESS] > 0) {
+				--copy_tasks[TaskStatus::IN_PROGRESS];
+				++updated_tasks[TaskStatus::IN_PROGRESS];
+				continue;
+			} else if (copy_tasks[TaskStatus::TESTING] > 0) {
+				--copy_tasks[TaskStatus::TESTING];
+				++updated_tasks[TaskStatus::TESTING];
 			}
 		}
-//		updated_tasks[TaskStatus::DONE] += tmp_count;
-		vault[person] = updated_tasks;
-		return tie(updated_tasks, updated_tasks);
 	}
 
 

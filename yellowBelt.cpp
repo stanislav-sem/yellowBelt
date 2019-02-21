@@ -35,9 +35,24 @@ public:
 	// Обновить статусы по данному количеству задач конкретного разработчика
 	tuple<TasksInfo, TasksInfo> PerformPersonTasks(const string& person, int task_count) {
 		TasksInfo updated_tasks = vault[person];
-		vector<int> tmp {updated_tasks[TaskStatus::NEW],
-			             updated_tasks[TaskStatus::IN_PROGRESS],
-						 updated_tasks[TaskStatus::TESTING]};
+		vector<TaskStatus> selector{TaskStatus::NEW, TaskStatus::IN_PROGRESS, TaskStatus::TESTING};
+		int tmp_count = 0;
+		for (auto el : selector) {
+			updated_tasks[el] += tmp_count;
+			if (updated_tasks[el] > task_count) {
+				updated_tasks[el] -= task_count;
+				updated_tasks[static_cast<TaskStatus>(static_cast<int>(el) +1)] += task_count;
+				tmp_count = task_count;
+				break;
+			} else {
+				task_count -= updated_tasks[el];
+				tmp_count = updated_tasks[el];
+				updated_tasks[el] = 0;
+			}
+		}
+//		updated_tasks[TaskStatus::DONE] += tmp_count;
+		vault[person] = updated_tasks;
+		return tie(updated_tasks, updated_tasks);
 	}
 
 
@@ -66,15 +81,20 @@ int main() {
 
 	TasksInfo updated_tasks, untouched_tasks;
 
+	cout << "-----------------" << endl;
 	tie(updated_tasks, untouched_tasks) = tasks.PerformPersonTasks("Ivan", 2);
 	cout << "Updated Ivan's tasks: ";
 	PrintTasksInfo(updated_tasks);
 	cout << "Untouched Ivan's tasks: ";
 	PrintTasksInfo(untouched_tasks);
+	cout << "Ivan's tasks: ";
+	PrintTasksInfo(tasks.GetPersonTasksInfo("Ivan"));
 
-	tie(updated_tasks, untouched_tasks) = tasks.PerformPersonTasks("Ivan", 2);
-	cout << "Updated Ivan's tasks: ";
-	PrintTasksInfo(updated_tasks);
-	cout << "Untouched Ivan's tasks: ";
-	PrintTasksInfo(untouched_tasks);
+
+//	cout << "-----------------" << endl;
+//	tie(updated_tasks, untouched_tasks) = tasks.PerformPersonTasks("Ivan", 2);
+//	cout << "Updated Ivan's tasks: ";
+//	PrintTasksInfo(updated_tasks);
+//	cout << "Untouched Ivan's tasks: ";
+//	PrintTasksInfo(untouched_tasks);
 }

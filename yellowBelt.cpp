@@ -1,123 +1,189 @@
+/*
 #include <iostream>
+#include <string>
+#include <map>
+#include <vector>
+
+using namespace std;
+int main() {
+  int q;
+  cin >> q;
+
+  map<string, vector<string>> buses_to_stops, stops_to_buses;
+
+  for (int i = 0; i < q; ++i) {
+    string operation_code;
+    cin >> operation_code;
+
+    if (operation_code == "NEW_BUS") {
+
+      string bus;
+      cin >> bus;
+      int stop_count;
+      cin >> stop_count;
+      vector<string>& stops = buses_to_stops[bus];
+      stops.resize(stop_count);
+      for (string& stop : stops) {
+        cin >> stop;
+        stops_to_buses[stop].push_back(bus);
+      }
+
+    } else if (operation_code == "BUSES_FOR_STOP") {
+
+      string stop;
+      cin >> stop;
+      if (stops_to_buses.count(stop) == 0) {
+        cout << "No stop" << endl;
+      } else {
+        for (const string& bus : stops_to_buses[stop]) {
+          cout << bus << " ";
+        }
+        cout << endl;
+      }
+
+    } else if (operation_code == "STOPS_FOR_BUS") {
+
+      string bus;
+      cin >> bus;
+      if (buses_to_stops.count(bus) == 0) {
+        cout << "No bus" << endl;
+      } else {
+        for (const string& stop : buses_to_stops[bus]) {
+          cout << "Stop " << stop << ": ";
+          if (stops_to_buses[stop].size() == 1) {
+            cout << "no interchange";
+          } else {
+            for (const string& other_bus : stops_to_buses[stop]) {
+              if (bus != other_bus) {
+                cout << other_bus << " ";
+              }
+            }
+          }
+          cout << endl;
+        }
+      }
+
+    } else if (operation_code == "ALL_BUSES") {
+
+      if (buses_to_stops.empty()) {
+        cout << "No buses" << endl;
+      } else {
+        for (const auto& bus_item : buses_to_stops) {
+          cout << "Bus " << bus_item.first << ": ";
+          for (const string& stop : bus_item.second) {
+            cout << stop << " ";
+          }
+          cout << endl;
+        }
+      }
+
+    }
+  }
+
+  return 0;
+}
+*/
+
+#include <string>
+#include <iostream>
+#include <cassert>
 #include <vector>
 #include <map>
-#include <tuple>
-#include <set>
+
 using namespace std;
 
-/*
-[{"IN_PROGRESS": 5}, {}]
-[{"TESTING": 5}, {}]
-[{"DONE": 1}, {"TESTING": 4}]
-[]
-[{"IN_PROGRESS": 2}, {"NEW": 3, "TESTING": 4, "DONE": 1}]
-{"NEW": 3, "IN_PROGRESS": 2, "TESTING": 4, "DONE": 1}
-[{"IN_PROGRESS": 3, "TESTING": 1}, {"IN_PROGRESS": 1, "TESTING": 4, "DONE": 1}]
-{"NEW": 0, "IN_PROGRESS": 4, "TESTING": 5, "DONE": 1}
-
-Correct output:
-[]
-[{"IN_PROGRESS": 5}, {}]
-[{"TESTING": 5}, {}]
-[{"DONE": 1}, {"TESTING": 4}]
-[]
-[{"IN_PROGRESS": 2}, {"NEW": 3, "TESTING": 4}]
-{"NEW": 3, "IN_PROGRESS": 2, "TESTING": 4, "DONE": 1}
-[{"IN_PROGRESS": 3, "TESTING": 1}, {"IN_PROGRESS": 1, "TESTING": 4}]
-{"IN_PROGRESS": 4, "TESTING": 5, "DONE": 1}
- */
-
-// Перечислимый тип для статуса задачи
-enum class TaskStatus {
-	NEW,
-	IN_PROGRESS,
-	TESTING,
-	DONE
+enum class QueryType {
+  NewBus,
+  BusesForStop,
+  StopsForBus,
+  AllBuses
 };
 
-// Тип-синоним для map<TaskStatus, int> позволяющий хранить количество задач данного статуса
-using TasksInfo = map<TaskStatus, int>;
+struct Query {
+  QueryType type;
+  string bus;
+  string stop;
+  vector<string> stops;
+};
 
-TasksInfo ZeroElErase(TasksInfo input) {
-	TasksInfo result;
-	for (auto el : {TaskStatus::NEW, TaskStatus::IN_PROGRESS, TaskStatus::TESTING, TaskStatus::DONE }) {
-		if (input[el] != 0) {
-			result[el] = input[el];
-		}
-	}
-	return result;
+istream& operator >> (istream& is, Query& q) {
+  // Реализуйте эту функцию
+  return is;
 }
 
-class TeamTasks {
+struct BusesForStopResponse {
+  // Наполните полями эту структуру
+};
+
+ostream& operator << (ostream& os, const BusesForStopResponse& r) {
+  // Реализуйте эту функцию
+  return os;
+}
+
+struct StopsForBusResponse {
+  // Наполните полями эту структуру
+};
+
+ostream& operator << (ostream& os, const StopsForBusResponse& r) {
+  // Реализуйте эту функцию
+  return os;
+}
+
+struct AllBusesResponse {
+  // Наполните полями эту структуру
+};
+
+ostream& operator << (ostream& os, const AllBusesResponse& r) {
+  // Реализуйте эту функцию
+  return os;
+}
+
+class BusManager {
 public:
-	// Получить статистику по статусам задач конкртеного разработчика
-	const TasksInfo& GetPersonTasksInfo(const string& person) const {
-		return vault.at(person);
-	}
+  void AddBus(const string& bus, const vector<string>& stops) {
+    // Реализуйте этот метод
+  }
 
-	// Добавить новую задачу (в статусе NEW) для конкретного разработчика
-	void AddNewTask(const string& person) {
-		++vault[person][TaskStatus::NEW];
-	}
+  BusesForStopResponse GetBusesForStop(const string& stop) const {
+    // Реализуйте этот метод
+  }
 
-	// Обновить статусы по данному количеству задач конкретного разработчика
-	tuple<TasksInfo, TasksInfo> PerformPersonTasks(const string& person, int task_count) {
-		TasksInfo copy_tasks = vault[person];
-		TasksInfo updated_tasks;
-		for (int i = 0; i < task_count; i++) {
-			if (copy_tasks[TaskStatus::NEW] > 0) {
-				--copy_tasks[TaskStatus::NEW];
-				++updated_tasks[TaskStatus::IN_PROGRESS];
-				continue;
-			} else if (copy_tasks[TaskStatus::IN_PROGRESS] > 0) {
-				--copy_tasks[TaskStatus::IN_PROGRESS];
-				++updated_tasks[TaskStatus::TESTING];
-				continue;
-			} else if (copy_tasks[TaskStatus::TESTING] > 0) {
-				--copy_tasks[TaskStatus::TESTING];
-				++updated_tasks[TaskStatus::DONE];
-			}
-		}
-		for (auto el : {TaskStatus::NEW, TaskStatus::IN_PROGRESS, TaskStatus::TESTING, TaskStatus::DONE }) {
-			vault[person][el] = updated_tasks[el] + copy_tasks[el];
-		}
-		updated_tasks = ZeroElErase(updated_tasks);
-		copy_tasks = ZeroElErase(copy_tasks);
-		return tie(updated_tasks, copy_tasks);
-	}
+  StopsForBusResponse GetStopsForBus(const string& bus) const {
+    // Реализуйте этот метод
+  }
 
-
-private:
-	map<string, TasksInfo> vault;
+  AllBusesResponse GetAllBuses() const {
+    // Реализуйте этот метод
+  }
 };
 
-void PrintTasksInfo(TasksInfo tasks_info) {
-	cout << tasks_info[TaskStatus::NEW] << " new tasks, " <<
-			tasks_info[TaskStatus::IN_PROGRESS] << " tasks in progress, " <<
-			tasks_info[TaskStatus::TESTING] << " tasks ate being tested, " <<
-			tasks_info[TaskStatus::DONE] << " tasks are done" << endl;
-}
-
+// Не меняя тела функции main, реализуйте функции и классы выше
 
 int main() {
-	TeamTasks tasks;
-	for (int i = 0; i < 5; ++i) {
-		tasks.AddNewTask("Alice");
-	}
-	TasksInfo updated_tasks, untouched_tasks;
-	tasks.PerformPersonTasks("Alice", 5);
-	PrintTasksInfo(tasks.GetPersonTasksInfo("Alice"));
-	tasks.PerformPersonTasks("Alice", 5);
-	PrintTasksInfo(tasks.GetPersonTasksInfo("Alice"));
-	tasks.PerformPersonTasks("Alice", 1);
-	PrintTasksInfo(tasks.GetPersonTasksInfo("Alice"));
-	for (int i = 0; i < 5; ++i) {
-		tasks.AddNewTask("Alice");
-	}
-	tasks.PerformPersonTasks("Alice", 2);
-	PrintTasksInfo(tasks.GetPersonTasksInfo("Alice"));
-	tasks.PerformPersonTasks("Alice", 4);
-	PrintTasksInfo(tasks.GetPersonTasksInfo("Alice"));
+  int query_count;
+  Query q;
 
+  cin >> query_count;
 
+  BusManager bm;
+  for (int i = 0; i < query_count; ++i) {
+    cin >> q;
+    switch (q.type) {
+    case QueryType::NewBus:
+      bm.AddBus(q.bus, q.stops);
+      break;
+    case QueryType::BusesForStop:
+      cout << bm.GetBusesForStop(q.stop) << endl;
+      break;
+    case QueryType::StopsForBus:
+      cout << bm.GetStopsForBus(q.bus) << endl;
+      break;
+    case QueryType::AllBuses:
+      cout << bm.GetAllBuses() << endl;
+      break;
+    }
+  }
+
+  return 0;
 }
+

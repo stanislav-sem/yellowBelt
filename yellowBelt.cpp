@@ -107,21 +107,50 @@ struct Query {
 };
 
 istream& operator >> (istream& is, Query& q) {
-  // Реализуйте эту функцию
+  string type;
+  is >> type;
+  if (type == "NEW_BUS") {
+	  q.type = QueryType::NewBus;
+	  int stops_count = 0;
+	  is >> q.bus >> stops_count;
+	  for (int i = 0; i < stops_count; i++) {
+		  is >> q.stop;
+		  q.stops.push_back(q.stop);
+	  }
+  } else if (type == "BUSES_FOR_STOP") {
+	  q.type = QueryType::BusesForStop;
+	  is >> q.stop;
+  } else if (type == "STOPS_FOR_BUS") {
+	  q.type = QueryType::StopsForBus;
+	  is >> q.bus;
+  } else if (type == "ALL_BUSES") {
+	  q.type = QueryType::AllBuses;
+  }
   return is;
 }
 
 struct BusesForStopResponse {
-  // Наполните полями эту структуру
+  vector<string> vec;
 };
 
 ostream& operator << (ostream& os, const BusesForStopResponse& r) {
-  // Реализуйте эту функцию
-  return os;
+	if ( r.vec.size() == 0) {
+		os << "No stop";
+	} else {
+		bool first = true;
+		for (const auto&  el : r.vec) {
+			if (!first) {
+				os << ' ';
+			}
+			first = false;
+			os << el;
+		}
+	}
+	return os;
 }
 
 struct StopsForBusResponse {
-  // Наполните полями эту структуру
+  vector<string> vec;
 };
 
 ostream& operator << (ostream& os, const StopsForBusResponse& r) {
@@ -141,20 +170,29 @@ ostream& operator << (ostream& os, const AllBusesResponse& r) {
 class BusManager {
 public:
   void AddBus(const string& bus, const vector<string>& stops) {
-    // Реализуйте этот метод
+	  buses_to_stops[bus] = stops;
+      for (string stop : stops) {
+    	  stops_to_buses[stop].push_back(bus);
+      }
   }
 
   BusesForStopResponse GetBusesForStop(const string& stop) const {
-    // Реализуйте этот метод
+	  BusesForStopResponse response;
+	  if (stops_to_buses.count(stop) != 0) {
+		  response.vec = stops_to_buses.at(stop);
+	  }
+	  return response;
   }
 
   StopsForBusResponse GetStopsForBus(const string& bus) const {
-    // Реализуйте этот метод
+    StopsForBusResponse response;
   }
 
   AllBusesResponse GetAllBuses() const {
     // Реализуйте этот метод
   }
+private:
+  map<string, vector<string>> buses_to_stops, stops_to_buses;
 };
 
 // Не меняя тела функции main, реализуйте функции и классы выше

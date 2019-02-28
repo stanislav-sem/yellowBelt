@@ -5,7 +5,6 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
-#include <cmath>
 
 using namespace std;
 
@@ -57,7 +56,18 @@ void AssertEqual(const T& t, const U& u, const string& hint = {}) {
     ostringstream os;
     os << "Assertion failed: " << t << " != " << u;
     if (!hint.empty()) {
-       os << " hint: " << hint;
+      os << " hint: " << hint;
+    }
+    throw runtime_error(os.str());
+  }
+}
+template<class T, class U>
+void AssertNotEqual(const T& t, const U& u, const string& hint = {}) {
+  if (t == u) {
+    ostringstream os;
+    os << "Assertion failed: " << t << " == " << u;
+    if (!hint.empty()) {
+      os << " hint: " << hint;
     }
     throw runtime_error(os.str());
   }
@@ -94,59 +104,75 @@ private:
   int fail_count = 0;
 };
 
-
-int GetDistinctRealRootCount(double a, double b, double c) {
-	set<double> korni;
-	double DD = b * b - 4 * a * c;
-	if (DD < 0) {
-		return 0;
+class Person {
+public:
+	void ChangeFirstName(int year, const string& first_name) {
+		// добавить факт изменения имени на first_name в год year
+		name[year] = first_name;
 	}
-	if (a == 0 && b != 0) {
-		korni = {0, -c/b};
-	} else if (a == 0 && b == 0) {
-		return 0;
-	} else {
-		double D = sqrt(DD);
-		double x1 = (-b + D)/(2 * a);
-		double x2 = (-b - D)/(2 * a);
-		set<double> korni = {x1, x2};
+	void ChangeLastName(int year, const string& last_name) {
+		// добавить факт изменения фамилии на last_name в год year
+		surname[year] = last_name;
 	}
-//  cout << korni << endl;
-	return korni.size();
-}
-void Test1() {
-	//проверяем правильность решения в классическом случае
-	AssertEqual(GetDistinctRealRootCount(1, 3, -4), 2, "Test1.1");
-	AssertEqual(GetDistinctRealRootCount(-6, -5, -1), 2, "Test1.2");
-}
+	string GetFullName(int year) {
+		// получить имя и фамилию по состоянию на конец года year
+		string result_name = "", result_surname = "", result;
+		for (const auto& i : name) {
+			if (i.first > year){
+				break;
+			}
+			result_name = i.second;
+		}
+		for (const auto& i : surname) {
+			if (i.first > year){
+				break;
+			}
+			result_surname = i.second;
+		}
+		if (result_name == "" && result_surname == "") {
+			result = "Incognito";
+		} else if (result_name == "") {
+			result = result_surname + " with unknown first name";
+		} else if (result_surname == "") {
+			result = result_name + " with unknown last name";
+		} else {
+			result = result_name +" " + result_surname;
+		}
+		return result;
 
-void Test2() {
-	//c=0
-	AssertEqual(GetDistinctRealRootCount(1, -4, 0), 2, "Test2.1");
-	AssertEqual(GetDistinctRealRootCount(1, -9, 0), 2, "Test2.2");
-	AssertEqual(GetDistinctRealRootCount(1, 0, 0), 1, "Test2.3");
-}
-void Test3() {
-	//b=0
-	AssertEqual(GetDistinctRealRootCount(1, 0, -9), 2, "Test3.1");
-	AssertEqual(GetDistinctRealRootCount(1, 0, 9), 0, "Test3.2");
-	AssertEqual(GetDistinctRealRootCount(1, 0, 0), 1, "Test3.3");
-}
-void Test4() {
-	// a=0
-	AssertEqual(GetDistinctRealRootCount(0, 1, 1), 1, "Test4.1");
-	AssertEqual(GetDistinctRealRootCount(0, 1, 0), 1, "Test4.2");
-}
+	}
+private:
+	map<int, string> name;
+	map<int, string> surname;
+};
 
+void TestIncognito () {
+	Person person;
+	AssertEqual(person.GetFullName(0), "Incognito", "Not incognito at 0 year.");
+	person.ChangeFirstName(2000, "Polina");
+	AssertEqual(person.GetFullName(1999), "Incognito", "Not incognito at 1999 year.");
+	AssertNotEqual(person.GetFullName(2001), "Incognito", "False incognito at 2001 year.");
+}
 
 int main() {
-  TestRunner runner;
-//  cout << GetDistinctRealRootCount(1, 3, -4);
-  runner.RunTest(Test1, "Test1");
-  runner.RunTest(Test2, "Test2");
-  runner.RunTest(Test3, "Test3");
-  runner.RunTest(Test4, "Test4");
-//  double a = 1, b = 0, c = 9;
-//  cout << sqrt(b*b - 4 * a * c);
-  return 0;
+	TestRunner runner;
+	runner.RunTest(TestIncognito, "TestIncognito");
+
+	Person person;
+	person.ChangeFirstName(1965, "Polina");
+	person.ChangeLastName(1967, "Sergeeva");
+	for (int year : { 1900, 1965, 1990 }) {
+		cout << person.GetFullName(year) << endl;
+	}
+
+	person.ChangeFirstName(1970, "Appolinaria");
+	for (int year : { 1969, 1970 }) {
+		cout << person.GetFullName(year) << endl;
+	}
+
+	person.ChangeLastName(1968, "Volkova");
+	for (int year : { 1969, 1970 }) {
+		cout << person.GetFullName(year) << endl;
+	}
+	return 0;
 }

@@ -56,18 +56,7 @@ void AssertEqual(const T& t, const U& u, const string& hint = {}) {
     ostringstream os;
     os << "Assertion failed: " << t << " != " << u;
     if (!hint.empty()) {
-      os << " hint: " << hint;
-    }
-    throw runtime_error(os.str());
-  }
-}
-template<class T, class U>
-void AssertNotEqual(const T& t, const U& u, const string& hint = {}) {
-  if (t == u) {
-    ostringstream os;
-    os << "Assertion failed: " << t << " == " << u;
-    if (!hint.empty()) {
-      os << " hint: " << hint;
+       os << " hint: " << hint;
     }
     throw runtime_error(os.str());
   }
@@ -75,6 +64,9 @@ void AssertNotEqual(const T& t, const U& u, const string& hint = {}) {
 
 void Assert(bool b, const string& hint) {
   AssertEqual(b, true, hint);
+}
+void AssertFalse(bool b, const string& hint) {
+  AssertEqual(b, false, hint);
 }
 
 class TestRunner {
@@ -104,75 +96,45 @@ private:
   int fail_count = 0;
 };
 
-class Person {
-public:
-	void ChangeFirstName(int year, const string& first_name) {
-		// добавить факт изменения имени на first_name в год year
-		name[year] = first_name;
-	}
-	void ChangeLastName(int year, const string& last_name) {
-		// добавить факт изменения фамилии на last_name в год year
-		surname[year] = last_name;
-	}
-	string GetFullName(int year) {
-		// получить имя и фамилию по состоянию на конец года year
-		string result_name = "", result_surname = "", result;
-		for (const auto& i : name) {
-			if (i.first > year){
-				break;
+bool IsPalindrom (string x) {
+	int l = x.size();
+	for (int i = 0; i < l; i++) {
+		if (x[i] != x[l - 1 - i]) {
+			return false;
 			}
-			result_name = i.second;
 		}
-		for (const auto& i : surname) {
-			if (i.first > year){
-				break;
-			}
-			result_surname = i.second;
-		}
-		if (result_name == "" && result_surname == "") {
-			result = "Incognito";
-		} else if (result_name == "") {
-			result = result_surname + " with unknown first name";
-		} else if (result_surname == "") {
-			result = result_name + " with unknown last name";
-		} else {
-			result = result_name +" " + result_surname;
-		}
-		return result;
+	return true;
+}
 
-	}
-private:
-	map<int, string> name;
-	map<int, string> surname;
-};
-
-void TestIncognito () {
-	Person person;
-	AssertEqual(person.GetFullName(0), "Incognito", "Not incognito at 0 year.");
-	person.ChangeFirstName(2000, "Polina");
-	AssertEqual(person.GetFullName(1999), "Incognito", "Not incognito at 1999 year.");
-	AssertNotEqual(person.GetFullName(2001), "Incognito", "False incognito at 2001 year.");
+void TestZeroString() {
+	Assert(IsPalindrom(""), "Zero string");
+}
+void TestOneChar() {
+	Assert(IsPalindrom("A"), "One char string");
+}
+void TestPalindrom() {
+	Assert(IsPalindrom("madam"), "madam");
+	Assert(IsPalindrom("wasitacaroracatisaw"), "wasitacaroracatisaw");
+	Assert(IsPalindrom("LeveL"), "LeveL");
+}
+void TestWithSpace() {
+	Assert(IsPalindrom("bep peb"), "bep peb");
+	Assert(IsPalindrom("m1a1m"), "m1a1m");
+	Assert(IsPalindrom("c1h2p3 3p2h1c"), "c1h2p3 3p2h1c");
+}
+void TestNotPalindrom() {
+	AssertFalse(IsPalindrom("Not palindrom"), "Not palindrom");
+	AssertFalse(IsPalindrom("aosdghfowfij"), "aosdghfowfij");
 }
 
 int main() {
-	TestRunner runner;
-	runner.RunTest(TestIncognito, "TestIncognito");
+  TestRunner runner;
+  runner.RunTest(TestZeroString, "TestZeroString");
+  runner.RunTest(TestOneChar, "TestOneChar");
+  runner.RunTest(TestPalindrom, "TestPalindrom");
+  runner.RunTest(TestWithSpace, "TestWithSpace");
+  runner.RunTest(TestNotPalindrom, "TestNotPalindrom");
 
-	Person person;
-	person.ChangeFirstName(1965, "Polina");
-	person.ChangeLastName(1967, "Sergeeva");
-	for (int year : { 1900, 1965, 1990 }) {
-		cout << person.GetFullName(year) << endl;
-	}
 
-	person.ChangeFirstName(1970, "Appolinaria");
-	for (int year : { 1969, 1970 }) {
-		cout << person.GetFullName(year) << endl;
-	}
-
-	person.ChangeLastName(1968, "Volkova");
-	for (int year : { 1969, 1970 }) {
-		cout << person.GetFullName(year) << endl;
-	}
-	return 0;
+  return 0;
 }

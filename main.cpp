@@ -10,7 +10,9 @@
 using namespace std;
 
 string ParseEvent(istream& is) {
-  // Реализуйте эту функцию
+	string str;
+	is >> str;
+	return str;
 }
 
 void TestAll();

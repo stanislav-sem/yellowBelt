@@ -1,5 +1,6 @@
 #include "condition_parser.h"
 #include "token.h"
+#include "node.h"
 
 #include <map>
 using namespace std;
@@ -57,6 +58,7 @@ template <class It> shared_ptr<Node> ParseComparison(It& current, It end) {
   }
 }
 
+// принимает итераторы на вектор токенов
 template <class It>
 shared_ptr<Node> ParseExpression(It& current, It end, unsigned precedence) {
   if (current == end) {

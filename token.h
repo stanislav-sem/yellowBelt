@@ -20,3 +20,12 @@ struct Token {
 };
 
 vector<Token> Tokenize(istream& cl);
+
+enum class Comparison {
+	Less,
+	LessOrEqual,
+	Greater,
+	GreaterOrEqual,
+	Equal,
+	NotEqual
+};

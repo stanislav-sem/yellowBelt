@@ -8,8 +8,11 @@ vector<Token> Tokenize(istream& cl) {
   vector<Token> tokens;
 
   char c;
+  // считываем по одному символу из входного потока
   while (cl >> c) {
+	  // Если цифра, значит в потоке содержиться дата
     if (isdigit(c)) {
+    	//создаем переменную string date сохраняющую символ из потока
       string date(1, c);
       for (int i = 0; i < 3; ++i) {
         while (isdigit(cl.peek())) {
@@ -20,16 +23,21 @@ vector<Token> Tokenize(istream& cl) {
         }
       }
       tokens.push_back({date, TokenType::DATE});
-    } else if (c == '"') {
+    }
+    // если в потоке содержиться сивол " значит содержиться название event'а
+    else if (c == '"') {
       string event;
       getline(cl, event, '"');
       tokens.push_back({event, TokenType::EVENT});
-    } else if (c == 'd') {
+    }
+    // проверка на слово data
+    else if (c == 'd') {
       if (cl.get() == 'a' && cl.get() == 't' && cl.get() == 'e') {
         tokens.push_back({"date", TokenType::COLUMN});
       } else {
         throw logic_error("Unknown token");
       }
+      // проверка на слово event
     } else if (c == 'e') {
       if (cl.get() == 'v' && cl.get() == 'e' && cl.get() == 'n' &&
           cl.get() == 't') {
@@ -37,13 +45,17 @@ vector<Token> Tokenize(istream& cl) {
       } else {
         throw logic_error("Unknown token");
       }
-    } else if (c == 'A') {
+    }
+    // проверка на слово AND
+    else if (c == 'A') {
       if (cl.get() == 'N' && cl.get() == 'D') {
         tokens.push_back({"AND", TokenType::LOGICAL_OP});
       } else {
         throw logic_error("Unknown token");
       }
-    } else if (c == 'O') {
+    }
+    // провекрка на слово OR
+    else if (c == 'O') {
       if (cl.get() == 'R') {
         tokens.push_back({"OR", TokenType::LOGICAL_OP});
       } else {

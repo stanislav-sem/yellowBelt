@@ -9,7 +9,7 @@ template <class It> shared_ptr<Node> ParseComparison(It& current, It end) {
   if (current == end) {
     throw logic_error("Expected column name: date or event");
   }
-
+//итератор на левую часть выражения
   Token& column = *current;
   if (column.type != TokenType::COLUMN) {
     throw logic_error("Expected column name: date or event");
@@ -19,11 +19,12 @@ template <class It> shared_ptr<Node> ParseComparison(It& current, It end) {
   if (current == end) {
     throw logic_error("Expected comparison operation");
   }
-
+//итератор на операцию сравнения
   Token& op = *current;
   if (op.type != TokenType::COMPARE_OP) {
     throw logic_error("Expected comparison operation");
   }
+//итератор на правую часть выражения
   ++current;
 
   if (current == end) {
@@ -57,6 +58,10 @@ template <class It> shared_ptr<Node> ParseComparison(It& current, It end) {
     return make_shared<EventComparisonNode>(cmp, value);
   }
 }
+
+/*
+{{"event", TokenType::COLUMN}, {"!=", TokenType::COMPARE_OP}, {"holiday", TokenType::EVENT}};
+ */
 
 // принимает итераторы на вектор токенов
 template <class It>
@@ -104,8 +109,13 @@ shared_ptr<Node> ParseExpression(It& current, It end, unsigned precedence) {
   return left;
 }
 
+
+
 shared_ptr<Node> ParseCondition(istream& is) {
+  // создаем вектор токенов из входящего потока
   auto tokens = Tokenize(is);
+
+  // передаем итераторы на первый и последний элементы вектора токенов
   auto current = tokens.begin();
   auto top_node = ParseExpression(current, tokens.end(), 0u);
 

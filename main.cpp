@@ -29,7 +29,7 @@ int main() {
     is >> command;
 
     if (command == "Add") {
-      const auto date = ParseDate(is);			// OK
+      const auto date = ParseDate(is);
       const auto event = ParseEvent(is);
       db.Add(date, event);
     }

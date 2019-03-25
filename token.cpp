@@ -4,12 +4,24 @@
 
 using namespace std;
 
+/*
+event != "holiday"
+{{"event", TokenType::COLUMN}, {"!=", TokenType::COMPARE_OP}, {"holiday", TokenType::EVENT}};
+
+date < 2017-01-01 AND (event == "holiday" OR event == "sport event")
+{{"date", TokenType::COLUMN}, {"<", TokenType::COMPARE_OP}, {"2017-01-01", TokenType::DATE},
+ {"AND", TokenType::LOGICAL_OP}, {"(", TokenType::PAREN_LEFT}, {"event", TokenType::COLUMN},
+ {"==", TokenType::COMPARE_OP}, {"holiday", TokenType::EVENT}, {"OR", TokenType::LOGICAL_OP},
+ {"event", TokenType::COLUMN}, {"==", TokenType::COMPARE_OP}, {"sport event", TokenType::EVENT},
+ {")", TokenType::PAREN_RIGHT}};
+ */
 vector<Token> Tokenize(istream& cl) {
   vector<Token> tokens;
 
   char c;
   // считываем по одному символу из входного потока
   while (cl >> c) {
+
 	  // Если цифра, значит в потоке содержиться дата
     if (isdigit(c)) {
     	//создаем переменную string date сохраняющую символ из потока
@@ -30,7 +42,7 @@ vector<Token> Tokenize(istream& cl) {
       getline(cl, event, '"');
       tokens.push_back({event, TokenType::EVENT});
     }
-    // проверка на слово data
+    // проверка на слово date
     else if (c == 'd') {
       if (cl.get() == 'a' && cl.get() == 't' && cl.get() == 'e') {
         tokens.push_back({"date", TokenType::COLUMN});
@@ -46,7 +58,7 @@ vector<Token> Tokenize(istream& cl) {
         throw logic_error("Unknown token");
       }
     }
-    // проверка на слово AND
+    // проверка на логическое AND
     else if (c == 'A') {
       if (cl.get() == 'N' && cl.get() == 'D') {
         tokens.push_back({"AND", TokenType::LOGICAL_OP});
@@ -54,38 +66,44 @@ vector<Token> Tokenize(istream& cl) {
         throw logic_error("Unknown token");
       }
     }
-    // провекрка на слово OR
+    // провекрка на логическое OR
     else if (c == 'O') {
       if (cl.get() == 'R') {
         tokens.push_back({"OR", TokenType::LOGICAL_OP});
       } else {
         throw logic_error("Unknown token");
       }
-    } else if (c == '(') {
+    }
+    else if (c == '(') {
       tokens.push_back({"(", TokenType::PAREN_LEFT});
-    } else if (c == ')') {
+    }
+    else if (c == ')') {
       tokens.push_back({")", TokenType::PAREN_RIGHT});
-    } else if (c == '<') {
+    }
+    else if (c == '<') {
       if (cl.peek() == '=') {
         cl.get();
         tokens.push_back({"<=", TokenType::COMPARE_OP});
       } else {
         tokens.push_back({"<", TokenType::COMPARE_OP});
       }
-    } else if (c == '>') {
+    }
+    else if (c == '>') {
       if (cl.peek() == '=') {
         cl.get();
         tokens.push_back({">=", TokenType::COMPARE_OP});
       } else {
         tokens.push_back({">", TokenType::COMPARE_OP});
       }
-    } else if (c == '=') {
+    }
+    else if (c == '=') {
       if (cl.get() == '=') {
         tokens.push_back({"==", TokenType::COMPARE_OP});
       } else {
         throw logic_error("Unknown token");
       }
-    } else if (c == '!') {
+    }
+    else if (c == '!') {
       if (cl.get() == '=') {
         tokens.push_back({"!=", TokenType::COMPARE_OP});
       } else {

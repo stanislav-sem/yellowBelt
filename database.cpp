@@ -8,6 +8,10 @@ void Database::Add(const Date date, const string event) {
 }
 
 ostream& Database::Print(ostream& os) {
-	os << "GAG" << endl;
+	for (auto item : database) {
+		for (auto el : item.second) {
+			os << item.first << " " << el << endl;
+		}
+	}
 	return os;
 }

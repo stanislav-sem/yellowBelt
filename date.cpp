@@ -19,7 +19,11 @@ int Date::GetDay() const {
 
 Date ParseDate(istream is) {
 	int year=666, month = 66, day = 66 ;
-	is >> year >> month >> day;
+	is >> year;
+	is.ignore(1);
+	is >> month;
+	is.ignore(1);
+	is >> day;
 	return Date(year, month, day);
 }
 

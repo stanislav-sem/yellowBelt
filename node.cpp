@@ -1,20 +1,23 @@
 #include "node.h"
 #include "date.h"
 
-class Node;
+void Node::Evalute(Date date, string str) {
+	cout << "GAG";
+}
 
 class EmptyNode : public Node {
 
 };
 
-class DateComprasionNode : public Node {
-	DateComparisonNode (Comparison cmp, Date date) {
+DateComparisonNode::DateComparisonNode (Comparison cmp, Date date) {
+	comparison_ = cmp;
+	date_= date;
+}
 
-	}
-};
-class EventComprasionNode : public Node {
-
-};
+EventComparisonNode::EventComparisonNode (Comparison cmp, string str) {
+	comparison_ = cmp;
+	value = str;
+}
 class LogicalOperationNode : public Node {
 
 };

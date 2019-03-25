@@ -29,13 +29,14 @@ int main() {
     is >> command;
 
     if (command == "Add") {
-      const auto date = ParseDate(is);
+      const auto date = ParseDate(is);			// OK
       const auto event = ParseEvent(is);
       db.Add(date, event);
     }
     else if (command == "Print") {
       db.Print(cout);
     }
+
     else if (command == "Del") {
       auto condition = ParseCondition(is);
       auto predicate = [condition](const Date& date, const string& event) {
@@ -44,25 +45,29 @@ int main() {
       int count = db.RemoveIf(predicate);
       cout << "Removed " << count << " entries" << endl;
     }
-    else if (command == "Find") {
-      auto condition = ParseCondition(is);
-      auto predicate = [condition](const Date& date, const string& event) {
-        return condition->Evaluate(date, event);
-      };
+//
+//    else if (command == "Find") {
+//      auto condition = ParseCondition(is);
+//      auto predicate = [condition](const Date& date, const string& event) {
+//        return condition->Evaluate(date, event);
+//      };
+//
+//      const auto entries = db.FindIf(predicate);
+//      for (const auto& entry : entries) {
+//        cout << entry << endl;
+//      }
+//      cout << "Found " << entries.size() << " entries" << endl;
+//    }
 
-      const auto entries = db.FindIf(predicate);
-      for (const auto& entry : entries) {
-        cout << entry << endl;
-      }
-      cout << "Found " << entries.size() << " entries" << endl;
-    }
-    else if (command == "Last") {
-      try {
-          cout << db.Last(ParseDate(is)) << endl;
-      } catch (invalid_argument&) {
-          cout << "No entries" << endl;
-      }
-    } else if (command.empty()) {
+//    else if (command == "Last") {
+//      try {
+//          cout << db.Last(ParseDate(is)) << endl;
+//      } catch (invalid_argument&) {
+//          cout << "No entries" << endl;
+//      }
+//    }
+
+    else if (command.empty()) {
       continue;
     } else {
       throw logic_error("Unknown command: " + command);

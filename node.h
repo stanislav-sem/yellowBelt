@@ -7,7 +7,10 @@ using namespace std;
 
 class Node {
 public:
-	virtual void Evaluate(Date , string);
+	template<typename T1, typename T2>
+	virtual bool Evaluate(T1 inputLeft, T2 inputRight) {
+
+	}
 	TokenType type;
 	string eventValue;
 };

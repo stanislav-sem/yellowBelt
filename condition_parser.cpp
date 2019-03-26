@@ -53,7 +53,8 @@ template <class It> shared_ptr<Node> ParseComparison(It& current, It end) {
 
   if (column.value == "date") {
     istringstream is(value);
-    return make_shared<DateComparisonNode>(cmp, ParseDate(is));
+//    return make_shared<DateComparisonNode>(cmp, ParseDate(is));
+    return make_shared<DateComparisonNode>(cmp, Date(66, 66, 66));
   } else {
     return make_shared<EventComparisonNode>(cmp, value);
   }

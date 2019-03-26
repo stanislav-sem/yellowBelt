@@ -5,6 +5,13 @@
 //		cout << "GAG";
 //}
 
+Node::Node() {
+//	type = TokenType::COLUMN;
+//	comparison_ = Comparison::Equal;
+//	value();
+//	date_();
+	cout<< "GAG Node::Node" << endl;
+}
 
 DateComparisonNode::DateComparisonNode (Comparison cmp, Date date) {
 	comparison_ = cmp;
@@ -14,6 +21,10 @@ DateComparisonNode::DateComparisonNode (Comparison cmp, Date date) {
 EventComparisonNode::EventComparisonNode (Comparison cmp, string str) {
 	comparison_ = cmp;
 	value = str;
+}
+
+LogicalOperationNode::LogicalOperationNode(LogicalOperation, shared_ptr<Node>, shared_ptr<Node>) {
+	cout<< "GAG: LogicalOperatrionNode" << endl;
 }
 
 bool DateComparisonNode::Evaluate(Date date_for_compare, string event_for_compare) {
@@ -49,10 +60,6 @@ bool EventComparisonNode::Evaluate(Date date_for_compare, string event_for_compa
 	case Comparison::NotEqual:
 		return value != event_for_compare;
 	}
-
-
-
 }
-//class LogicalOperationNode : public Node {
-//
-//};
+
+

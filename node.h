@@ -2,6 +2,7 @@
 
 #include "token.h"
 #include "date.h"
+#include <memory>
 
 using namespace std;
 
@@ -22,18 +23,19 @@ class EmptyNode : public Node {};
 class DateComparisonNode : public Node {
 public:
 	DateComparisonNode(Comparison , Date );
-	virtual bool Evaluate( Date ,  string );
+	bool Evaluate( Date ,  string );
 };
 
 
 class EventComparisonNode : public Node {
 public:
 	EventComparisonNode(Comparison , string);
-	virtual bool Evaluate( Date ,  string );
+	bool Evaluate( Date ,  string );
 };
 
 
 class LogicalOperationNode : public Node {
 public:
+	LogicalOperationNode(LogicalOperation, shared_ptr<Node>, shared_ptr<Node>);
 	LogicalOperation logOp;
 };

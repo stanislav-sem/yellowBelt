@@ -22,3 +22,10 @@ private:
 Date ParseDate(istream is);
 
 ostream& operator << (ostream& os, const Date& data);
+
+bool operator == (Date&, Date&);
+bool operator > (Date&, Date&);
+bool operator >= (Date&, Date&);
+bool operator < (Date&, Date&);
+bool operator <= (Date&, Date&);
+bool operator!=(Date&, Date&);

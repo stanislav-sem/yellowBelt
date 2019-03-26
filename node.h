@@ -7,12 +7,12 @@ using namespace std;
 
 class Node {
 public:
-	template<typename T1, typename T2>
-	virtual bool Evaluate(T1 inputLeft, T2 inputRight) {
-
-	}
+	Node ();
+	virtual bool Evaluate( Date , string );
 	TokenType type;
-	string eventValue;
+	string value;
+	Comparison comparison_;
+	Date date_;
 };
 
 
@@ -22,20 +22,18 @@ class EmptyNode : public Node {};
 class DateComparisonNode : public Node {
 public:
 	DateComparisonNode(Comparison , Date );
-	bool Evaluate(const Date& , const string& );
-public:
-	Comparison comparison_;
-	Date date_;
+	virtual bool Evaluate( Date ,  string );
 };
 
 
 class EventComparisonNode : public Node {
 public:
 	EventComparisonNode(Comparison , string);
-	Date date_;
-	Comparison comparison_;
-	bool Evaluate(const Date& , const string& );
+	virtual bool Evaluate( Date ,  string );
 };
 
 
-class LogicalOperationNode : public Node {};
+class LogicalOperationNode : public Node {
+public:
+	LogicalOperation logOp;
+};

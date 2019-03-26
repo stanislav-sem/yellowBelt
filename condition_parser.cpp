@@ -63,7 +63,7 @@ template <class It> shared_ptr<Node> ParseComparison(It& current, It end) {
 {{"event", TokenType::COLUMN}, {"!=", TokenType::COMPARE_OP}, {"holiday", TokenType::EVENT}};
  */
 
-// принимает итераторы на вектор токенов
+// принимает итераторы на вектор токенов----------------------------------------------------------------
 template <class It>
 shared_ptr<Node> ParseExpression(It& current, It end, unsigned precedence) {
   if (current == end) {

@@ -32,3 +32,30 @@ ostream& operator << (ostream& os, const Date& data) {
 	os << setw(4) << data.GetYear() << '-' << setw(2) << data.GetMonth() << '-' << data.GetDay();
 	return os;
 }
+bool operator == (Date& lhs, Date& rhs) {
+	if(lhs.GetYear() == rhs.GetYear()) {
+			if (lhs.GetMonth() == rhs.GetMonth()) {
+				return lhs.GetDay() == rhs.GetDay();
+			}
+		} return false;
+}
+bool operator > (Date& lhs, Date& rhs){
+	if (lhs.GetYear() == rhs.GetYear()) {
+		if (lhs.GetMonth() == rhs.GetMonth()) {
+			return lhs.GetDay() > rhs.GetDay();
+		} else {
+			return lhs.GetMonth() > rhs.GetMonth()
+		}
+	}
+	return lhs.GetYear() > rhs.GetYear();
+}
+bool operator >= (Date&, Date&);
+bool operator < (Date&, Date&);
+bool operator <= (Date&, Date&);
+bool operator!=(Date& lhs, Date& rhs) {
+	if(lhs.GetYear() == rhs.GetYear()) {
+		if (lhs.GetMonth() == rhs.GetMonth()) {
+			return lhs.GetDay() != rhs.GetDay();
+		}
+	} return true;
+}

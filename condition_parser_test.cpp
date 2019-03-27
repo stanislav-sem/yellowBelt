@@ -19,6 +19,24 @@ void TestParseCondition() {
     Assert(!root->Evaluate({2017, 1, 1}, "holiday"), "Parse condition 4");
   }
   {
+    istringstream is("date >= 2017-01-01");
+    shared_ptr<Node> root = ParseCondition(is);
+    Assert(root->Evaluate({2017, 1, 1}, ""), "Parse condition 5.1");
+    Assert(root->Evaluate({2017, 3, 1}, ""), "Parse condition 6.1");
+    Assert(root->Evaluate({2017, 6, 30}, ""), "Parse condition 7.1");
+    Assert(root->Evaluate({2017, 7, 1}, ""), "Parse condition 8.1");
+    Assert(!root->Evaluate({2016, 12, 31}, ""), "Parse condition 9.1");
+  }
+  {
+    istringstream is("date < 2017-07-01");
+    shared_ptr<Node> root = ParseCondition(is);
+    Assert(root->Evaluate({2017, 1, 1}, ""), "Parse condition 5.2");
+    Assert(root->Evaluate({2017, 3, 1}, ""), "Parse condition 6.2");
+    Assert(root->Evaluate({2017, 6, 30}, ""), "Parse condition 7.2");
+    Assert(!root->Evaluate({2017, 7, 1}, ""), "Parse condition 8.2");
+    Assert(root->Evaluate({2016, 12, 31}, ""), "Parse condition 9.2");
+  }
+  {
     istringstream is("date >= 2017-01-01 AND date < 2017-07-01");
     shared_ptr<Node> root = ParseCondition(is);
     Assert(root->Evaluate({2017, 1, 1}, ""), "Parse condition 5");

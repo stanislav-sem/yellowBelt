@@ -35,5 +35,4 @@ enum class Comparison {
 enum class LogicalOperation {
 	Or,
 	And,
-	GAG
 };

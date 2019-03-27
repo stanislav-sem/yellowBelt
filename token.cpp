@@ -5,8 +5,10 @@
 using namespace std;
 
 /*
-date != 2017-11-18
-{{date, TokenType::DATE}, {"!=", TokenType::COMPARE_OP}, {"2017-11-18", TokenType::DATE}}
+date >= 2017-01-01 AND date < 2017-07-01
+{{"date", TokenType::COLUMN}, {">=", TokenType::COMPARE_OP}, {"2017-01-01", TokenType::DATE},
+ {"AND", TokenType::LOGICAL_OP}, {"date", TokenType::COLUMN}, {"<", TokenType::COMPARE_OP},
+ {"2017-07-01", TokenType::DATE}}
  */
 vector<Token> Tokenize(istream& cl) {
   vector<Token> tokens;

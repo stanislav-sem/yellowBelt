@@ -11,6 +11,7 @@ template <class It> shared_ptr<Node> ParseComparison(It& current, It end) {
   }
 //итератор на левую часть выражения
   Token& column = *current;
+
   if (column.type != TokenType::COLUMN) {
     throw logic_error("Expected column name: date or event");
   }
@@ -21,6 +22,7 @@ template <class It> shared_ptr<Node> ParseComparison(It& current, It end) {
   }
 //итератор на операцию сравнения
   Token& op = *current;
+
   if (op.type != TokenType::COMPARE_OP) {
     throw logic_error("Expected comparison operation");
   }
@@ -60,8 +62,8 @@ template <class It> shared_ptr<Node> ParseComparison(It& current, It end) {
 }
 
 /*
-date != 2017-11-18
-{{date, TokenType::DATE}, {"!=", TokenType::COMPARE_OP}, {"2017-11-18", TokenType::DATE}}
+
+
  */
 
 // принимает итераторы на вектор токенов----------------------------------------------------------------
@@ -81,7 +83,8 @@ shared_ptr<Node> ParseExpression(It& current, It end, unsigned precedence) {
     }
     ++current; // consume ')'
   } else {
-    left = ParseComparison(current, end);
+	  left = ParseComparison(current, end); // из первой строки получили
+	  	  	  	  	  	  	  	  	  	  	// {Comparison::GreaterOrEqual, "2017-01-01"}
   }
 
   const map<LogicalOperation, unsigned> precedences = {
@@ -96,6 +99,7 @@ shared_ptr<Node> ParseExpression(It& current, It end, unsigned precedence) {
     const auto logical_operation = current->value == "AND" ? LogicalOperation::And
                                                            : LogicalOperation::Or;
     const auto current_precedence = precedences.at(logical_operation);
+    // извлекли "AND" и сохранили в current_precedence
     if (current_precedence <= precedence) {
       break;
     }

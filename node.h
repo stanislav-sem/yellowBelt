@@ -38,5 +38,8 @@ public:
 class LogicalOperationNode : public Node { // @suppress("Class has a virtual method and non-virtual destructor")
 public:
 	LogicalOperationNode(LogicalOperation, shared_ptr<Node>, shared_ptr<Node>);
+	bool Evaluate(Date , string);
 	LogicalOperation logOp;
+	shared_ptr<Node> leftForCompare;
+	shared_ptr<Node> rightForCompare;
 };

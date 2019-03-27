@@ -15,3 +15,4 @@ ostream& Database::Print(ostream& os) {
 	}
 	return os;
 }
+

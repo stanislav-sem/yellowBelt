@@ -19,7 +19,7 @@ private:
 
 };
 
-Date ParseDate(istringstream is);
+Date ParseDate(istringstream& is);
 
 ostream& operator << (ostream& os, const Date& data);
 

@@ -14,8 +14,8 @@ int Date::GetDay() const {
 	return day;
 }
 
-Date ParseDate(istringstream is) {
-	int year=666, month = 66, day = 66 ;
+Date ParseDate(istringstream& is) {
+	int year, month, day;
 	is >> year;
 	is.ignore(1);
 	is >> month;

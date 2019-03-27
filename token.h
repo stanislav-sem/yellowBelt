@@ -12,6 +12,7 @@ enum class TokenType {
   COMPARE_OP,
   PAREN_LEFT,
   PAREN_RIGHT,
+  GAG
 };
 
 struct Token {
@@ -27,10 +28,12 @@ enum class Comparison {
 	Greater,
 	GreaterOrEqual,
 	Equal,
-	NotEqual
+	NotEqual,
+	GAG
 };
 
 enum class LogicalOperation {
 	Or,
-	And
+	And,
+	GAG
 };

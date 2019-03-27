@@ -5,15 +5,8 @@
 using namespace std;
 
 /*
-event != "holiday"
-{{"event", TokenType::COLUMN}, {"!=", TokenType::COMPARE_OP}, {"holiday", TokenType::EVENT}};
-
-date < 2017-01-01 AND (event == "holiday" OR event == "sport event")
-{{"date", TokenType::COLUMN}, {"<", TokenType::COMPARE_OP}, {"2017-01-01", TokenType::DATE},
- {"AND", TokenType::LOGICAL_OP}, {"(", TokenType::PAREN_LEFT}, {"event", TokenType::COLUMN},
- {"==", TokenType::COMPARE_OP}, {"holiday", TokenType::EVENT}, {"OR", TokenType::LOGICAL_OP},
- {"event", TokenType::COLUMN}, {"==", TokenType::COMPARE_OP}, {"sport event", TokenType::EVENT},
- {")", TokenType::PAREN_RIGHT}};
+date != 2017-11-18
+{{date, TokenType::DATE}, {"!=", TokenType::COMPARE_OP}, {"2017-11-18", TokenType::DATE}}
  */
 vector<Token> Tokenize(istream& cl) {
   vector<Token> tokens;

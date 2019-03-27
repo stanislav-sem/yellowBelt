@@ -53,15 +53,15 @@ template <class It> shared_ptr<Node> ParseComparison(It& current, It end) {
 
   if (column.value == "date") {
     istringstream is(value);
-//    return make_shared<DateComparisonNode>(cmp, ParseDate(is));
-    return make_shared<DateComparisonNode>(cmp, Date(66, 66, 66));
+    return make_shared<DateComparisonNode>(cmp, ParseDate(is));
   } else {
     return make_shared<EventComparisonNode>(cmp, value);
   }
 }
 
 /*
-{{"event", TokenType::COLUMN}, {"!=", TokenType::COMPARE_OP}, {"holiday", TokenType::EVENT}};
+date != 2017-11-18
+{{date, TokenType::DATE}, {"!=", TokenType::COMPARE_OP}, {"2017-11-18", TokenType::DATE}}
  */
 
 // принимает итераторы на вектор токенов----------------------------------------------------------------

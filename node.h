@@ -6,35 +6,36 @@
 
 using namespace std;
 
-class Node {
+class Node { // @suppress("Class has a virtual method and non-virtual destructor")
 public:
 	Node ();
 	virtual bool Evaluate( Date , string );
 	TokenType type;
 	string value;
-	Comparison comparison_;
-	Date date_;
 };
 
 
-class EmptyNode : public Node {};
+class EmptyNode : public Node {}; // @suppress("Class has a virtual method and non-virtual destructor")
 
 
-class DateComparisonNode : public Node {
+class DateComparisonNode : public Node { // @suppress("Class has a virtual method and non-virtual destructor")
 public:
 	DateComparisonNode(Comparison , Date );
 	bool Evaluate( Date ,  string );
+	Date date_;
+	Comparison comparison_;
 };
 
 
-class EventComparisonNode : public Node {
+class EventComparisonNode : public Node { // @suppress("Class has a virtual method and non-virtual destructor")
 public:
 	EventComparisonNode(Comparison , string);
 	bool Evaluate( Date ,  string );
+	Comparison comparison_;
 };
 
 
-class LogicalOperationNode : public Node {
+class LogicalOperationNode : public Node { // @suppress("Class has a virtual method and non-virtual destructor")
 public:
 	LogicalOperationNode(LogicalOperation, shared_ptr<Node>, shared_ptr<Node>);
 	LogicalOperation logOp;

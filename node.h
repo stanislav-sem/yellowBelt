@@ -8,7 +8,7 @@ using namespace std;
 
 class Node { // @suppress("Class has a virtual method and non-virtual destructor")
 public:
-	Node ();
+	Node (TokenType );
 	virtual bool Evaluate( Date , string );
 	TokenType type;
 	string value;

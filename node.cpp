@@ -1,12 +1,13 @@
 #include "node.h"
 #include "date.h"
 
-Node::Node() {
-	type = TokenType::GAG;
-	value = "GAG";
+Node::Node(TokenType inputType = TokenType::GAG) {
+	type = inputType;
+	value = "";
 }
 
-DateComparisonNode::DateComparisonNode (Comparison cmp, Date date) : comparison_(cmp), date_(date) {};
+DateComparisonNode::DateComparisonNode (Comparison cmp, Date date) :
+		comparison_(cmp), date_(date), Node(TokenType::DATE) {};
 
 EventComparisonNode::EventComparisonNode (Comparison cmp, string str) {
 	comparison_ = cmp;

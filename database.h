@@ -4,6 +4,9 @@
 #include <vector>
 #include <string>
 #include <set>
+#include <algorithm>
+#include <utility>
+#include <functional>
 #include "date.h"
 #include "token.h"
 
@@ -13,26 +16,17 @@ using namespace std;
 class Database {
 public:
 	void Add (const Date, const string);
-	ostream& Print(ostream&);
+	ostream& Print(ostream&) const;
 
-	template <typename Func>
-	int RemoveIf(Func& predicate) {
-		int count = 0;
-		if (*predicate.type == "a") {
-			for (auto el : databaseVec) {
-				if (predicate(el.first, "")) {
-					databaseVec.erase(el.first);
-					databaseSet.erase(el.first);
-				}
-			}
-		}
+	int RemoveIf(std::function<bool(Date, string)> );
 
-		return count;
-	}
+	vector<pair<Date, string>> FindIf(std::function<bool(Date, string)> ) const;
 
-	void Last(Date);
+	string Last(Date ) const;
 
 private:
 	map<Date, vector<string>> databaseVec;
 	map<Date, set<string>> databaseSet;
 };
+
+	ostream& operator << (ostream& , const pair<Date, string>& );

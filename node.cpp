@@ -1,18 +1,26 @@
 #include "node.h"
 #include "date.h"
 
-Node::Node(TokenType inputType = TokenType::GAG) {
-	type = inputType;
-	value = "";
-}
+Node::Node() : type(TokenType::GAG), comparison_(Comparison::GAG) {};
+
+Node::Node(TokenType inputType, Comparison cmp) : type(inputType), comparison_(cmp) {};
+
+DateComparisonNode::DateComparisonNode () {
+	date_ = Date();
+	Node(TokenType::DATE, Comparison::GAG);
+};
 
 DateComparisonNode::DateComparisonNode (Comparison cmp, Date date) :
-		comparison_(cmp), date_(date), Node(TokenType::DATE) {};
+		 date_(date), Node(TokenType::DATE, cmp) {};
 
-EventComparisonNode::EventComparisonNode (Comparison cmp, string str) {
-	comparison_ = cmp;
-	value = str;
-}
+EventComparisonNode::EventComparisonNode () {
+		value = "";
+		Node(TokenType::EVENT, Comparison::GAG);
+};
+
+EventComparisonNode::EventComparisonNode (Comparison cmp, string str) :
+		value(str),  Node(TokenType::EVENT, cmp) {};
+
 
 LogicalOperationNode::LogicalOperationNode(LogicalOperation lo, shared_ptr<Node> a, shared_ptr<Node> b) {
 	logOp = lo;
@@ -20,13 +28,25 @@ LogicalOperationNode::LogicalOperationNode(LogicalOperation lo, shared_ptr<Node>
 	rightForCompare = b;
 }
 
+EmptyNode::EmptyNode() {
+	Node();
+};
+
+Comparison Node::GetComparison() const {
+	return comparison_;
+}
+
 bool Node::Evaluate(Date , string) {
 	cout << "GAG Node::Evaluate"<< endl;
 	return false;
 }
 
+bool EmptyNode::Evaluate(Date , string) {
+	return true;
+}
 bool DateComparisonNode::Evaluate(Date date_for_compare, string event_for_compare) {
-	switch(comparison_) {
+	const Comparison cmp = GetComparison();
+	switch(cmp) {
 	case Comparison::Equal:
 		return date_for_compare == date_;
 	case Comparison::Greater:
@@ -39,14 +59,14 @@ bool DateComparisonNode::Evaluate(Date date_for_compare, string event_for_compar
 		return date_for_compare <= date_;
 	case Comparison::NotEqual:
 		return date_for_compare != date_;
-	case Comparison::GAG:
-		cout << "something went wrong!";
-		break;
+	default:
+		return false;
 	}
 }
 
 bool EventComparisonNode::Evaluate(Date date_for_compare, string event_for_compare) {
-	switch(comparison_)	{
+	const Comparison cmp = GetComparison();
+	switch(cmp) {
 	case Comparison::Less:
 		return event_for_compare < value;
 	case Comparison::Equal:
@@ -59,9 +79,8 @@ bool EventComparisonNode::Evaluate(Date date_for_compare, string event_for_compa
 		return event_for_compare <= value;
 	case Comparison::NotEqual:
 		return event_for_compare != value;
-	case Comparison::GAG:
-		cout << "something went wrong!";
-		break;
+	default:
+		return false;
 	}
 }
 
@@ -73,6 +92,8 @@ bool LogicalOperationNode::Evaluate(Date date_for_compare, string event_for_comp
 	case LogicalOperation::Or:
 		return leftForCompare->Evaluate(date_for_compare, event_for_compare) ||
 			   rightForCompare->Evaluate(date_for_compare, event_for_compare);
+	default:
+		return false;
 	}
 }
 

@@ -1,6 +1,18 @@
 #include "date.h"
 
-Date::Date(int a = 0, int b = 0, int c = 0) : year(a), month(b), day(c) {};
+Date ParseDate(istream& is) {
+	int year, month, day;
+	is >> year;
+	is.ignore(1);
+	is >> month;
+	is.ignore(1);
+	is >> day;
+	return Date(year, month, day);
+}
+
+Date::Date() : year(666), month(66), day(66) {};
+
+Date::Date(int a, int b, int c) : year(a), month(b), day(c) {};
 
 int Date::GetYear() const{
 	return year;
@@ -12,17 +24,6 @@ int Date::GetMonth() const {
 
 int Date::GetDay() const {
 	return day;
-}
-
-Date ParseDate(istringstream& is) {
-	int year, month, day;
-	is >> year;
-	is.ignore(1);
-	is >> month;
-	is.ignore(1);
-	is >> day;
-	return Date(year, month, day);
-
 }
 
 ostream& operator << (ostream& os, const Date& data) {

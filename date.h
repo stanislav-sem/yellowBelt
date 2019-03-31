@@ -8,18 +8,19 @@ using namespace std;
 
 class Date{
 public:
-	Date(int a, int b, int c);
+	Date();
+	Date(int , int , int );
 	int GetYear() const;
 	int GetMonth() const;
 	int GetDay() const;
 private:
-	int year;
-	int month;
-	int day;
+	int year=0;
+	int month=0;
+	int day=0;
 
 };
 
-Date ParseDate(istringstream& is);
+Date ParseDate(istream& is);
 
 ostream& operator << (ostream& os, const Date& data);
 

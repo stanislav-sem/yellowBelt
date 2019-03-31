@@ -8,30 +8,40 @@ using namespace std;
 
 class Node { // @suppress("Class has a virtual method and non-virtual destructor")
 public:
-	Node (TokenType );
+	Node();
+	Node (TokenType, Comparison  );
 	virtual bool Evaluate( Date , string );
+	Comparison GetComparison() const ;
+private:
 	TokenType type;
-	string value;
+	Comparison comparison_;
+
 };
 
 
-class EmptyNode : public Node {}; // @suppress("Class has a virtual method and non-virtual destructor")
+class EmptyNode : public Node { // @suppress("Class has a virtual method and non-virtual destructor")
+public:
+	EmptyNode();
+	virtual bool Evaluate( Date , string );
+};
 
 
 class DateComparisonNode : public Node { // @suppress("Class has a virtual method and non-virtual destructor")
 public:
+	DateComparisonNode();
 	DateComparisonNode(Comparison , Date );
-	bool Evaluate( Date ,  string );
+	bool Evaluate( Date ,  string ) override;
 	Date date_;
-	Comparison comparison_;
+
 };
 
 
 class EventComparisonNode : public Node { // @suppress("Class has a virtual method and non-virtual destructor")
 public:
+	EventComparisonNode();
 	EventComparisonNode(Comparison , string);
 	bool Evaluate( Date ,  string );
-	Comparison comparison_;
+	string value;
 };
 
 

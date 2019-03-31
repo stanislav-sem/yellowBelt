@@ -28,7 +28,7 @@ int Date::GetDay() const {
 
 ostream& operator << (ostream& os, const Date& data) {
 	os << setfill('0');
-	os << setw(4) << data.GetYear() << '-' << setw(2) << data.GetMonth() << '-' << data.GetDay();
+	os << setw(4) << data.GetYear() << '-' << setw(2) << data.GetMonth() << '-' << setw(2) << data.GetDay();
 	return os;
 }
 

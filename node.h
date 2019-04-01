@@ -10,7 +10,7 @@ class Node { // @suppress("Class has a virtual method and non-virtual destructor
 public:
 	Node();
 	Node (TokenType, Comparison  );
-	virtual bool Evaluate( Date , string );
+	virtual bool Evaluate( Date , string ) =0;
 	Comparison GetComparison() const ;
 private:
 	TokenType type;
@@ -22,7 +22,7 @@ private:
 class EmptyNode : public Node { // @suppress("Class has a virtual method and non-virtual destructor")
 public:
 	EmptyNode();
-	virtual bool Evaluate( Date , string );
+	virtual bool Evaluate( Date , string ) override;
 };
 
 
@@ -40,7 +40,7 @@ class EventComparisonNode : public Node { // @suppress("Class has a virtual meth
 public:
 	EventComparisonNode();
 	EventComparisonNode(Comparison , string);
-	bool Evaluate( Date ,  string );
+	bool Evaluate( Date ,  string ) override;
 	string value;
 };
 
@@ -48,7 +48,7 @@ public:
 class LogicalOperationNode : public Node { // @suppress("Class has a virtual method and non-virtual destructor")
 public:
 	LogicalOperationNode(LogicalOperation, shared_ptr<Node>, shared_ptr<Node>);
-	bool Evaluate(Date , string);
+	bool Evaluate(Date , string) override;
 	LogicalOperation logOp;
 	shared_ptr<Node> leftForCompare;
 	shared_ptr<Node> rightForCompare;

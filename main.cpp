@@ -3,6 +3,7 @@
 #include "condition_parser.h"
 #include "node.h"
 #include "test_runner.h"
+#include <fstream>
 
 #include <iostream>
 #include <stdexcept>
@@ -24,8 +25,10 @@ int main() {
   TestAll();
 
   Database db;
+  fstream file("E:\\coding\\cpp\\yellowBelt\\src\\tests.txt");
 
-  for (string line; getline(cin, line); ) {
+  for (string line; getline(file, line); ) {
+//  for (string line; getline(cin, line); ) {
     istringstream is(line);
 
     string command;
@@ -93,3 +96,4 @@ void TestAll() {
   tr.RunTest(TestParseEvent, "TestParseEvent");
   tr.RunTest(TestParseCondition, "TestParseCondition");
 }
+

@@ -39,21 +39,23 @@ int Database::RemoveIf(std::function<bool(Date, string)> predicate) {
 	int count = 0;
 	for (auto& el : databaseVec) {
 		if (el.second.size() != 0) {
-			auto it =
-					stable_partition(el.second.begin(), el.second.end(),
+			auto it = stable_partition(el.second.begin(), el.second.end(),
 							[predicate, el](const string& str) {return !predicate(el.first, str);});
-
 			for (auto deleter = --el.second.end(); deleter >= it; deleter--) {
 				el.second.erase(deleter);
 				count++;
 			}
-			if (el.second.size() == 0) {
-				databaseVec.erase(el.first);
-				databaseSet.erase(el.first);
-			} else if (count != 0) {
-				databaseSet[el.first] = set<string>(el.second.begin(),
-						el.second.end());
+			if (el.second.size() != 0) {
+				databaseSet[el.first] = set<string>(el.second.begin(), el.second.end());
 			}
+		}
+			}
+	for (auto it = databaseVec.begin(); it != databaseVec.end(); ) {
+		if (it->second.size() == 0) {
+			databaseVec.erase(it++);
+			databaseSet.erase(it->first);
+		} else {
+			it++;
 		}
 	}
 	return count;

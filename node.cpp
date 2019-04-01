@@ -5,17 +5,15 @@ Node::Node() : type(TokenType::GAG), comparison_(Comparison::GAG) {};
 
 Node::Node(TokenType inputType, Comparison cmp) : type(inputType), comparison_(cmp) {};
 
-DateComparisonNode::DateComparisonNode () {
+DateComparisonNode::DateComparisonNode() : Node(TokenType::DATE, Comparison::GAG) {
 	date_ = Date();
-	Node(TokenType::DATE, Comparison::GAG);
 };
 
 DateComparisonNode::DateComparisonNode (Comparison cmp, Date date) :
 		 date_(date), Node(TokenType::DATE, cmp) {};
 
-EventComparisonNode::EventComparisonNode () {
+EventComparisonNode::EventComparisonNode() : Node(TokenType::EVENT, Comparison::GAG) {
 		value = "";
-		Node(TokenType::EVENT, Comparison::GAG);
 };
 
 EventComparisonNode::EventComparisonNode (Comparison cmp, string str) :
@@ -28,20 +26,13 @@ LogicalOperationNode::LogicalOperationNode(LogicalOperation lo, shared_ptr<Node>
 	rightForCompare = b;
 }
 
-EmptyNode::EmptyNode() {
-	Node();
-};
+EmptyNode::EmptyNode() : Node() {};
 
 Comparison Node::GetComparison() const {
 	return comparison_;
 }
 
-bool Node::Evaluate(Date , string) {
-	cout << "GAG Node::Evaluate"<< endl;
-	return false;
-}
-
-bool EmptyNode::Evaluate(Date , string) {
+bool EmptyNode::Evaluate(Date , string)  {
 	return true;
 }
 bool DateComparisonNode::Evaluate(Date date_for_compare, string event_for_compare) {

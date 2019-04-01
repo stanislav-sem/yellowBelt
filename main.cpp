@@ -25,10 +25,11 @@ int main() {
   TestAll();
 
   Database db;
-  fstream file("E:\\coding\\cpp\\yellowBelt\\src\\tests.txt");
+//  fstream file("E:\\coding\\cpp\\yellowBelt\\src\\tests.txt");
+//  fstream file("C:\\Users\\user\\eclipse-workspace\\yellowBelt\\src\\test1.txt");
 
-  for (string line; getline(file, line); ) {
-//  for (string line; getline(cin, line); ) {
+//  for (string line; getline(file, line); ) {
+  for (string line; getline(cin, line); ) {
     istringstream is(line);
 
     string command;
@@ -37,16 +38,20 @@ int main() {
       const auto date = ParseDate(is);
       const auto event = ParseEvent(is);
       db.Add(date, event);
-    } else if (command == "Print") {
+    }
+    else if (command == "Print") {
       db.Print(cout);
-    } else if (command == "Del") {
+    }
+    else if (command == "Del") {
       auto condition = ParseCondition(is);
       auto predicate = [condition](const Date& date, const string& event) {
         return condition->Evaluate(date, event);
       };
       int count = db.RemoveIf(predicate);
       cout << "Removed " << count << " entries" << endl;
-    } else if (command == "Find") {
+
+    }
+    else if (command == "Find") {
       auto condition = ParseCondition(is);
       auto predicate = [condition](const Date& date, const string& event) {
         return condition->Evaluate(date, event);
@@ -57,19 +62,22 @@ int main() {
         cout << entry << endl;
       }
       cout << "Found " << entries.size() << " entries" << endl;
-    } else if (command == "Last") {
+    }
+    else if (command == "Last") {
       try {
           cout << db.Last(ParseDate(is)) << endl;
       } catch (invalid_argument&) {
           cout << "No entries" << endl;
       }
-    } else if (command.empty()) {
+    }
+    else if (command.empty()) {
       continue;
-    } else {
+    }
+    else {
       throw logic_error("Unknown command: " + command);
     }
   }
-
+//  file.close();
   return 0;
 }
 

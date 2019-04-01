@@ -35,29 +35,42 @@ ostream& operator << (ostream& os, const pair<Date, string>& input ) {
 	return os;
 }
 
+ostream& operator << (ostream& os, const map<Date, set<string>> input) {
+	for (const auto& i : input) {
+		for (const auto& j : i.second) {
+			cout << i.first << " " << j << endl;
+		}
+	}
+	return os;
+}
+
 int Database::RemoveIf(std::function<bool(Date, string)> predicate) {
 	int count = 0;
+	vector<Date> keysForDel;
 	for (auto& el : databaseVec) {
 		if (el.second.size() != 0) {
 			auto it = stable_partition(el.second.begin(), el.second.end(),
 							[predicate, el](const string& str) {return !predicate(el.first, str);});
+
 			for (auto deleter = --el.second.end(); deleter >= it; deleter--) {
 				el.second.erase(deleter);
 				count++;
 			}
+//			count = el.second.end() - it;
+//			el.second.erase(it, el.second.end());
+
 			if (el.second.size() != 0) {
 				databaseSet[el.first] = set<string>(el.second.begin(), el.second.end());
+			} else if (el.second.size() == 0) {
+				keysForDel.push_back(el.first);
 			}
-		}
-			}
-	for (auto it = databaseVec.begin(); it != databaseVec.end(); ) {
-		if (it->second.size() == 0) {
-			databaseVec.erase(it++);
-			databaseSet.erase(it->first);
-		} else {
-			it++;
 		}
 	}
+	for (const auto& i : keysForDel ) {
+		databaseVec.erase(i);
+		databaseSet.erase(i);
+	}
+//	cout << databaseSet;
 	return count;
 }
 

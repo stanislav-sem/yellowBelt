@@ -30,3 +30,4 @@ private:
 };
 
 	ostream& operator << (ostream& , const pair<Date, string>& );
+	ostream& operator << (ostream& , const map<Date, set<string>>);

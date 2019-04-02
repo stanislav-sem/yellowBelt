@@ -18,7 +18,7 @@ ostream& Database::Print(ostream& os) const{
 
 string Database::Last(Date date) const {
 	stringstream _event;
-	if (date < databaseVec.begin()->first) {
+	if (databaseVec.empty() || date < databaseVec.begin()->first) {
 		throw invalid_argument("date < all existing");
 	}
 
@@ -52,12 +52,14 @@ int Database::RemoveIf(std::function<bool(Date, string)> predicate) {
 			auto it = stable_partition(el.second.begin(), el.second.end(),
 							[predicate, el](const string& str) {return !predicate(el.first, str);});
 
-			for (auto deleter = --el.second.end(); deleter >= it; deleter--) {
+			for (auto deleter = el.second.end()-1; deleter >= it; deleter--) {
 				el.second.erase(deleter);
 				count++;
 			}
-//			count = el.second.end() - it;
-//			el.second.erase(it, el.second.end());
+//			if (it != el.second.end()) {
+//				count += (el.second.end() - it);
+//				el.second.erase(it, el.second.end());
+//			}
 
 			if (el.second.size() != 0) {
 				databaseSet[el.first] = set<string>(el.second.begin(), el.second.end());

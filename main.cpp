@@ -26,12 +26,11 @@ int main() {
 
   Database db;
 //  fstream file("E:\\coding\\cpp\\yellowBelt\\src\\tests.txt");
-//  fstream file("C:\\Users\\user\\eclipse-workspace\\yellowBelt\\src\\test1.txt");
+//  fstream file("C:\\Users\\user\\eclipse-workspace\\yellowBelt\\src\\tests.txt");
 
 //  for (string line; getline(file, line); ) {
   for (string line; getline(cin, line); ) {
     istringstream is(line);
-
     string command;
     is >> command;
     if (command == "Add") {
@@ -77,8 +76,7 @@ int main() {
       throw logic_error("Unknown command: " + command);
     }
   }
-//  file.close();
-  return 0;
+   return 0;
 }
 
 void TestParseEvent() {

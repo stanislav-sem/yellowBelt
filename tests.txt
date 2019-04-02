@@ -1,0 +1,44 @@
+Last 2008-10-10
+Add 2017-06-01 1st of June
+
+Add 2017-07-08 8th of July
+
+Add 2017-07-08 Someone's birthday
+
+
+Del date == 2017-07-08
+
+Add 2017-07-08 8th of July
+
+Add 2017-07-08 Someone's birthday
+
+
+Print
+
+Del
+Add 2017-06-01 aaa1
+
+Add 2017-06-01 aaa2
+Add 2017-06-01 aaa3
+Add 2017-06-01 aaa1
+
+Add 2017-06-01 aaa1
+Add 2017-06-22 bbb1
+
+Add 2017-06-22 bbb2
+Add 2017-06-22 bbb3
+
+Del event >= "aa" AND event <= "b"
+
+Find
+
+Add 2017-06-01 aaa2
+Add 2017-06-01 aaa3
+Add 2017-06-01 aaa1
+
+
+Find
+Del
+Last
+
+
